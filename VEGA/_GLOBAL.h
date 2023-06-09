@@ -8,6 +8,8 @@
 
 #define PUSH_BUTTON_1 18
 
+bool crashed = false;
+
 ///// WIFI /////
 char* AP="VEGA_DRONE";
 char* PASS="BlackFalcon69";
@@ -24,7 +26,7 @@ int esc1mapped, esc2mapped, esc3mapped, esc4mapped;
 int input_PITCH = 0;
 int input_ROLL = 0;
 int input_YAW;
-int input_THROTTLE=1100;
+int input_THROTTLE=35;
 int state1,state2,state3,state4;
 
 ///// GYRO VARS /////

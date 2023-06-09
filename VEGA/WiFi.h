@@ -81,20 +81,3 @@ void CheckUDP(){
     Serial.print(input_THROTTLE);Serial.print("\t");
   }
 }
-
-//void loop() { 
-//  sendCommand("AT+CIPMUX=1",3,"OK");  // This AT Command is used to enable or disable multiple TCP Connections. (0: Single connection, 1: Multiple connections)
-//  memset(atcommand,0,250);
-//  sprintf(atcommand,"AT+CIPSTART=0,\"TCP\",\"%s\",%d", HOST, PORT);    // to establish one of the three connections: TCP, UDP or SSL. 
-//  sendCommand(atcommand,3,"OK");
-//  memset(atcommand,0,250);
-//   memset(data,0,250);
-//  sprintf(data,"{\"value\": %d}",getSensorData());
-//  sprintf(payload,"POST %s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/json\r\nX-AIO-Key: %s\r\nContent-Length: %d\r\n\r\n%s",URL, HOST, KEY, strlen(data),data);
-//  sprintf(atcommand,"AT+CIPSEND=0,%d",strlen(payload));  //  to start sending data in transparent transmission mode.
-//  sendCommand(atcommand,4,">");
-//  esp8266.println(payload);
-//  countTrueCommand++;
-//  delay(2000);
-//  sendCommand("AT+CIPCLOSE=0",5,"OK");  // Closes TCP/UDP/SSL connection 
-//}

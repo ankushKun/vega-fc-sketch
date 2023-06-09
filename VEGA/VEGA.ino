@@ -17,7 +17,6 @@ void setup() {
   delay(500);
 //  SetupWifi();
 //  delay(500);
-  Time = micros();
 }
 
 void loop() {
@@ -25,5 +24,5 @@ void loop() {
   ReadFromMPU();
   WriteESC();
 //  Oscillate(80);
-//  Serial.println();
+  Serial.println();
 }

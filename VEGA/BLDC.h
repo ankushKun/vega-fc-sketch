@@ -104,19 +104,25 @@ void Oscillate(int maxim){
 }
 
 void WriteESC(){
-  while ((micros() - Time) < 1000);
+  if(crashed){
+      ESCout_1 = 0;
+      ESCout_2 = 0;
+      ESCout_3 = 0;
+      ESCout_4 = 0;
+      Serial.println("CRASHED");
+  }
   
       esc1.write(ESCout_1);
       esc2.write(ESCout_2);
       esc3.write(ESCout_3);
       esc4.write(ESCout_4);
 
-//      Serial.print("ESC1: ");
-//      Serial.print(esc1mapped);
-//      Serial.print("\tESC2: ");
-//      Serial.print(esc2mapped);
-//      Serial.print("\tESC3: ");
-//      Serial.print(esc3mapped);
-//      Serial.print("\tESC4: ");
-//      Serial.println(esc4mapped);
+      Serial.print("ESC3: ");
+      Serial.print(ESCout_3);
+      Serial.print("\tESC1: ");
+      Serial.println(ESCout_1);
+      Serial.print("ESC2: ");
+      Serial.print(ESCout_2);
+      Serial.print("\tESC4: ");
+      Serial.println(ESCout_4);
 }
