@@ -1,5 +1,6 @@
 #define DEBUG 1
 #define CALIBRATE_ESC false
+#define NO_YAW true
 
 #define TRUE 1
 #define FALSE 0
@@ -17,10 +18,11 @@ char* PASS="BlackFalcon69";
 #define ESC2 1
 #define ESC3 2
 #define ESC4 3
+int minThrottle = 0, maxThrottle = 128;
 int ESCout_1 ,ESCout_2 ,ESCout_3 ,ESCout_4;
 int esc1mapped, esc2mapped, esc3mapped, esc4mapped;
-int input_PITCH = 50;
-int input_ROLL = 50;
+int input_PITCH = 0;
+int input_ROLL = 0;
 int input_YAW;
 int input_THROTTLE=1100;
 int state1,state2,state3,state4;
@@ -34,6 +36,8 @@ float angle_pitch_output, angle_roll_output;
 float elapsedTime;
 long Time = micros(), timePrev, time2;
 long gyro_x_cal, gyro_y_cal, gyro_z_cal;
+double offsetX,offsetY,offsetZ;
+
 
 ///// PID VARS /////
 float pitch_PID,roll_PID,yaw_PID;

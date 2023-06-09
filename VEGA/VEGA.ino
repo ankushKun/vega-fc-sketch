@@ -3,25 +3,27 @@
 #include "MPUStuff.h"
 #include "WiFi.h"
 
+unsigned long timer = 0;
+
 void setup() {
   delay(500);
   Serial.begin(115200);
   Serial.println(">>> BOOTED");
 
-//  SetupESC();
+  SetupESC();
 //  CalibrateESC();
-//  delay(500);
-//  SetupMPU();
-//  delay(500);
-  SetupWifi();
   delay(500);
+  SetupMPU();
+  delay(500);
+//  SetupWifi();
+//  delay(500);
   Time = micros();
 }
 
 void loop() {
   CheckUDP();
-//  Oscillate();
-//  ReadFromMPU();
-//  WriteESC();
+  ReadFromMPU();
+  WriteESC();
+//  Oscillate(80);
 //  Serial.println();
 }
