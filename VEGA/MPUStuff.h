@@ -45,8 +45,8 @@ void ReadFromMPU() {
   if(angle_roll < -100 || angle_pitch < -100){crashed = true;}
   if(crashed)return;
 
-  roll_mapped = map(angle_roll, -90,90,-40,40);
-  pitch_mapped = map(angle_pitch, -90,90,-40,40);
+//  roll_mapped = map(angle_roll, -90,90,-40,40);
+//  pitch_mapped = map(angle_pitch, -90,90,-40,40);
   yaw_mapped = mapf(delta_yaw, -2.0,2.0,-10.0,10.0);
 
   // Roll PID
@@ -54,17 +54,17 @@ void ReadFromMPU() {
   roll_integral += roll_error;
   roll_derivative = roll_error - roll_previous_error;
   roll_previous_error = roll_error;
-  float roll_PID = roll_Kp * roll_error + roll_Ki * roll_integral + roll_Kd * roll_derivative;
+  float roll_PID = XY_Kp * roll_error + XY_Ki * roll_integral + XY_Kd * roll_derivative;
   
   // Pitch PID
   pitch_error = angle_pitch - input_PITCH;
   pitch_integral += pitch_error;
   pitch_derivative = pitch_error - pitch_previous_error;
   pitch_previous_error = pitch_error;
-  float pitch_PID = pitch_Kp * pitch_error + pitch_Ki * pitch_integral + pitch_Kd * pitch_derivative;
+  float pitch_PID = XY_Kp * pitch_error + XY_Ki * pitch_integral + XY_Kd * pitch_derivative;
   
   // Yaw PID
-  yaw_error = angle_yaw - input_YAW;
+  yaw_error = yaw_mapped - input_YAW;
   yaw_integral += yaw_error;
   yaw_derivative = yaw_error - yaw_previous_error;
   yaw_previous_error = yaw_error;
@@ -81,7 +81,7 @@ void ReadFromMPU() {
   ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
 
 
-  minThrottle = input_THROTTLE;
+//  minThrottle = input_THROTTLE;
   
   if(ESCout_1>maxThrottle) ESCout_1=maxThrottle;
   else if(ESCout_1<minThrottle) ESCout_1=minThrottle;

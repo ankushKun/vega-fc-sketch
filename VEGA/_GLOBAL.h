@@ -2,8 +2,9 @@
 ///// CONFIGS /////
 // Comment a line to disable
 #define DEBUG
-#define CALIBRATE_ESC
+//#define CALIBRATE_ESC
 #define CALIBRATE_MPU
+#define ENABLE_WIFI
 
 ///// VARS /////
 #define PUSH_BUTTON_1 18
@@ -47,24 +48,23 @@ float roll_error = 0;
 float roll_integral = 0;
 float roll_derivative = 0;
 float roll_previous_error = 0;
-float roll_Kp = 0.1;    // Proportional gain
-float roll_Ki = 0.01;   // Integral gain
-float roll_Kd = 0.05;   // Derivative gain
 
 // Pitch PID
 float pitch_error = 0;
 float pitch_integral = 0;
 float pitch_derivative = 0;
 float pitch_previous_error = 0;
-float pitch_Kp = 0.1;   // Proportional gain
-float pitch_Ki = 0.01;  // Integral gain
-float pitch_Kd = 0.05;  // Derivative gain
+
+// Roll and Pitch PID params
+float XY_Kp = 0.25;
+float XY_Ki = 0.001;
+float XY_Kd = 0.005;
 
 // Yaw PID
 float yaw_error = 0;
 float yaw_integral = 0;
 float yaw_derivative = 0;
 float yaw_previous_error = 0;
-float yaw_Kp = 0.1;     // Proportional gain
-float yaw_Ki = 0.01;    // Integral gain
-float yaw_Kd = 0.05;    // Derivative gain
+float yaw_Kp = 0.2;
+float yaw_Ki = 0.001;
+float yaw_Kd = 0.005;

@@ -12,14 +12,18 @@ void setup() {
 
   SetupMPU();
   delay(500);
-//  SetupWifi();
-//  delay(500);
+#ifdef ENABLE_WIFI
+  SetupWifi();
+  delay(500);
+#endif
   SetupESC();
   delay(500);
 }
 
 void loop() {
-//  CheckUDP();
+#ifdef ENABLE_WIFI
+  CheckUDP();
+#endif
   ReadFromMPU();
   WriteESC();
   delay(10);
@@ -30,6 +34,7 @@ void loop() {
   Serial.print(angle_pitch);Serial.print(" P ");
   Serial.print(delta_yaw);Serial.println(" Y ");
   Serial.print("Yaw mapped: ");Serial.println(yaw_mapped);
+  Serial.println();
 
   Serial.print("ESC3: ");
   Serial.print(ESCout_3);
@@ -39,5 +44,7 @@ void loop() {
   Serial.print(ESCout_2);
   Serial.print("\tESC4: ");
   Serial.println(ESCout_4);
+  Serial.print("Throttle: ");Serial.println(input_THROTTLE);
+  Serial.println();
 #endif
 }
