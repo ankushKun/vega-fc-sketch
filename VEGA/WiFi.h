@@ -22,7 +22,7 @@ void sendCommand(String cmd, long int timeoutSeconds){
 }
 
  void SetupWifi(){
-  Serial.println("-> SETTING UP WIFI");
+  Serial.println("SETTING UP WIFI");
   esp.begin(9200);
   delay(500);
   sendCommand("AT+RST\r\n", 1); // OK
