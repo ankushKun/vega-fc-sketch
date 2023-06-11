@@ -2,14 +2,15 @@
 ///// CONFIGS /////
 // Comment a line to disable
 #define DEBUG
-// #define CALIBRATE_ESC
- #define CALIBRATE_MPU
+#define CALIBRATE_ESC
+#define CALIBRATE_MPU
 //#define CALIBRATE_RECIEVER
 //#define ENABLE_WIFI
 
 ///// VARS /////
 #define PUSH_BUTTON_1 18
 bool has_display = true;
+bool armed = false;
 bool crashed = false;
 bool killed = false;
 
@@ -73,7 +74,7 @@ float yaw_Ki = 0.000;
 float yaw_Kd = 0.000;
 
 ///// REMOTE CALIBRATION /////
-int throttleRaw, rollRaw, pitchRaw, yawRaw;
+int throttleRaw, rollRaw, pitchRaw, yawRaw, killRaw, modeRaw, btnRaw;
 int THROTTLE_MIN = 1100, THROTTLE_MAX = 2000;
 int ROLL_MIN = 1100, ROLL_MAX = 2000;
 int PITCH_MIN = 1100, PITCH_MAX = 2000;

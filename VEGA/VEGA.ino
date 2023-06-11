@@ -16,10 +16,14 @@ void setup() {
   Serial.println("\n\n>>> BOOTED");
 
   SetupOLED();
+  delay(1000);
   SetupReciever();
+  delay(1000);
 //  CalibrateReciever();
   SetupMPU();
+  delay(1000);
   SetupESC();
+  delay(1000);
 #ifdef ENABLE_WIFI
   SetupWifi();
 #endif
@@ -28,9 +32,10 @@ void setup() {
 void loop() {
   ReadReciever();
   
-#ifdef ENABLE_WIFI
-  CheckUDP();
-#endif
+//#ifdef ENABLE_WIFI
+//  CheckUDP();
+//#endif
+
   ReadFromMPU();
   WriteESC();
 
@@ -60,5 +65,5 @@ void loop() {
   Serial.println();
 #endif
 
-delay(10);
+delay(1);
 }

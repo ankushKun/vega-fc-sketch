@@ -1,10 +1,12 @@
 #include <pwm.h>
 
-#define CH_ROL 0
-#define CH_PIT 1
-#define CH_THR 2
-#define CH_YAW 3
-#define CH_KIL 4
+#define CH_ROL 0  // roll        -> channel 1
+#define CH_PIT 1  // pitch       -> channel 2
+#define CH_THR 2  // throttle    -> channel 3
+#define CH_YAW 3  // Yaw         -> channel 4
+#define CH_KIL 11 // Kill switch -> channel 5
+#define CH_BTN 12 // Button calibration ->  6
+#define CH_MOD 13 // Mode        -> channel 7
 
 //void CalibrateReciever(){
 //  Serial.println("CALIBRATING RECIEVER");
@@ -44,6 +46,7 @@ void SetupReciever(){
   pinMode(CH_YAW, INPUT);
   pinMode(CH_KIL, INPUT);
   Serial.println("RECIEVER SETUP");
+  writeText("RECIEVER SETUP");
 //  #ifdef CALIBRATE_TRANSMITTER
 //  CalibrateReciever();
 //  #endif
@@ -58,14 +61,26 @@ void ReadReciever(){
   pitchRaw = pulseIn(CH_PIT, HIGH, 1000);
   Serial.print("\tPITCH: ");Serial.print(pitchRaw);
   yawRaw = pulseIn(CH_YAW, HIGH, 1000);
-  Serial.print("\tYAW: ");Serial.println(yawRaw);
-//  int kill = pulseIn(CH_KIL, HIGH, 1000);
-  
-//  Serial.print("KILL: ");Serial.println(kill);
-//  if(!killed && kill <=500) killed = true;
+  Serial.print("\tYAW: ");Serial.print(yawRaw);
+  killRaw = pulseIn(CH_KIL, HIGH, 1000);
+  Serial.print("\tKILL: ");Serial.print(killRaw);
+  modeRaw = pulseIn(CH_MOD, HIGH, 1000);
+  Serial.print("\tMODE: ");Serial.print(modeRaw);
+  btnRaw = pulseIn(CH_BTN, HIGH, 1000);
+  Serial.print("\tBTN: ");Serial.println(btnRaw);
 
+  if(!killed && killRaw > 1500) killed = true;
+
+  if(modeRaw <= 1400){
+    armed = false;
+  }else if(modeRaw>1400){
+    armed = true;
+  } // add another if block for >1600 to auto land the drone
+  
   input_THROTTLE = map(throttleRaw, 1100, 2000, minThrottle, maxThrottle);
   input_ROLL = map(rollRaw, 1100, 2000, -90, 90);
-  input_PITCH = map(pitchRaw, 1100, 2000, 90, -90);
-  
+  input_PITCH = map(pitchRaw, 1100, 2000, 90, -90); 
 }
+
+boolean btnHigh(){Serial.print("btnHigh ");Serial.print(btnRaw>1500);Serial.println(btnRaw);ReadReciever();return (boolean)(btnRaw>1500);}
+boolean btnLow(){Serial.print("btnHigh ");Serial.print(btnRaw>1500);Serial.println(btnRaw);ReadReciever();return (boolean)(btnRaw<=1500);}

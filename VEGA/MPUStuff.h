@@ -14,10 +14,12 @@ void SetupMPU(){
   Serial.println("INITIALIZING MPU");
   mpu.Initialize();
   #ifdef CALIBRATE_MPU
-  Serial.println(F("CALIBRATING MPU, DONOT MOVE"));
-  delay(500);
+  Serial.println("CALIBRATING MPU, DONOT MOVE");
+  writeText("CALIBRATING\nMPU");
+  delay(1000);
   mpu.Calibrate();
   Serial.println("Calibration complete!");
+  writeText("DONE!");
   #endif
   Serial.println("MPU Offsets:");
   Serial.print("GyroX Offset = ");
@@ -26,7 +28,7 @@ void SetupMPU(){
   Serial.println(mpu.GetGyroYOffset());
   Serial.print("GyroZ Offset = ");
   Serial.println(mpu.GetGyroZOffset());
-  Time = micros(); 
+  Time = micros();
 }
 
 void ReadFromMPU() {
@@ -40,7 +42,10 @@ void ReadFromMPU() {
   prev_yaw = angle_yaw;
 
   if(angle_roll < -110 || angle_pitch < -110){crashed = true;}
-  if(crashed)return;
+  if(crashed){
+    writeText("CRASHED");
+    return;
+  }
 
 //  roll_mapped = map(angle_roll, -90,90,-40,40);
 //  pitch_mapped = map(angle_pitch, -90,90,-40,40);
@@ -77,7 +82,6 @@ void ReadFromMPU() {
   ESCout_3 = input_THROTTLE - roll_PID - pitch_PID - yaw_PID;
   ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
 
-
   int minThrTemp = minThrottle;
   if(input_THROTTLE>minThrottle)
       minThrTemp = input_THROTTLE;
@@ -93,4 +97,6 @@ void ReadFromMPU() {
   
   if(ESCout_4>maxThrottle) ESCout_4=maxThrottle;
   else if(ESCout_4<minThrTemp) ESCout_4=minThrTemp;
+
+  displayESCVals();
 }
