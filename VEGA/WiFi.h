@@ -48,6 +48,12 @@ void sendCommand(String cmd, long int timeoutSeconds){
 // 9056766001
 
 void parseInput(String inputString) {
+  if(!inputString.indexOf("@")==0){
+    Serial.print("BAD INPUT: ");Serial.println(inputString);
+    return;  
+  }else{
+    Serial.print("PARSING: ");Serial.println(inputString);
+  }
   int separatorPos = inputString.indexOf(';');  // Find the first separator (;)
   
   if (separatorPos != -1) {
@@ -66,18 +72,24 @@ void parseInput(String inputString) {
   }
 }
 
+int ci;
+char c;
+String recv = "";
 void CheckUDP(){
   if(esp.available()){
-    String espIn = "";
-    while(esp.available()){
-      char c = (char)esp.read();
-      if(c=='\n')break;
-      espIn = espIn + c;
-    }
-    Serial.println(espIn);
-    parseInput(espIn);
-    Serial.print(input_PITCH);Serial.print("\t");
-    Serial.print(input_ROLL);Serial.print("\t");
-    Serial.print(input_THROTTLE);Serial.print("\t");
+      c = (char)esp.read();
+      if(c=='+')recv="";
+      else if(c=="\n"){
+        parseInput(recv);
+        recv="";
+      }else{
+        recv+=c;
+      }
   }
+  Serial.print("CMD: ");Serial.println(recv);
+
+//  Serial.print(input_PITCH);Serial.print("\t");
+//  Serial.print(input_ROLL);Serial.print("\t");
+//  Serial.print(input_THROTTLE);Serial.print("\t");
+//  delay(1000);
 }

@@ -2,13 +2,16 @@
 ///// CONFIGS /////
 // Comment a line to disable
 #define DEBUG
-//#define CALIBRATE_ESC
-#define CALIBRATE_MPU
-#define ENABLE_WIFI
+// #define CALIBRATE_ESC
+ #define CALIBRATE_MPU
+//#define CALIBRATE_RECIEVER
+//#define ENABLE_WIFI
 
 ///// VARS /////
 #define PUSH_BUTTON_1 18
+bool has_display = true;
 bool crashed = false;
+bool killed = false;
 
 ///// WIFI /////
 char* AP="VEGA_DRONE";
@@ -56,15 +59,22 @@ float pitch_derivative = 0;
 float pitch_previous_error = 0;
 
 // Roll and Pitch PID params
-float XY_Kp = 0.25;
-float XY_Ki = 0.001;
-float XY_Kd = 0.005;
+float XY_Kp = 0.6;
+float XY_Ki = 0.000;
+float XY_Kd = 0.000;
 
 // Yaw PID
 float yaw_error = 0;
 float yaw_integral = 0;
 float yaw_derivative = 0;
 float yaw_previous_error = 0;
-float yaw_Kp = 0.2;
-float yaw_Ki = 0.001;
-float yaw_Kd = 0.005;
+float yaw_Kp = 0.0;
+float yaw_Ki = 0.000;
+float yaw_Kd = 0.000;
+
+///// REMOTE CALIBRATION /////
+int throttleRaw, rollRaw, pitchRaw, yawRaw;
+int THROTTLE_MIN = 1100, THROTTLE_MAX = 2000;
+int ROLL_MIN = 1100, ROLL_MAX = 2000;
+int PITCH_MIN = 1100, PITCH_MAX = 2000;
+int YAW_MIN = 1100, YAW_MAX = 2000;

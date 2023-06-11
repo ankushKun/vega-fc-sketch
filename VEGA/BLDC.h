@@ -44,7 +44,6 @@ void CalibrateESC(){
             esc2.write(0);
             esc3.write(0);
             esc4.write(0);
-            delay(10);
             Serial.println("NO THROTTLE\t RELEASE BUTTON");
           }else{
             for(int i=128;i>0;i--){
@@ -53,8 +52,8 @@ void CalibrateESC(){
               esc2.write(i);
               esc3.write(i);
               esc4.write(i);
-              if(i=1)isLow=true;
-              delay(10);
+              if(i==1)isLow=true;
+              delayMicroseconds(1000);
             }
           }
         }
@@ -65,7 +64,7 @@ void CalibrateESC(){
           esc2.write(0);
           esc3.write(0);
           esc4.write(0);
-          delay(10);
+          delayMicroseconds(1000);
         }
         Serial.println("CALIBRATION DONE!");
         break;
@@ -73,7 +72,6 @@ void CalibrateESC(){
         Serial.println("PRESS AND HOLD BUTTON 1");
       }
     }
-    delay(10);
   }
 }
 
@@ -84,7 +82,9 @@ void SetupESC(){
   esc4.attach(ESC4);
   Serial.println("ESCs Attached");
   delay(100);
+  #ifdef CALIBRATE_ESC
   CalibrateESC();
+  #endif
 }
 
 void Oscillate(int maxim){
@@ -115,6 +115,13 @@ void WriteESC(){
     ESCout_3 = 0;
     ESCout_4 = 0;
     Serial.println("CRASHED");
+  }
+  if(killed){
+    ESCout_1 = 0;
+    ESCout_2 = 0;
+    ESCout_3 = 0;
+    ESCout_4 = 0;
+    Serial.println("KILLED");
   }
   esc1.write(ESCout_1);
   esc2.write(ESCout_2);

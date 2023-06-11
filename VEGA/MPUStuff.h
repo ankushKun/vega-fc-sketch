@@ -1,8 +1,6 @@
-#include <Wire.h>
 #include <TinyMPU6050.h>
 
-TwoWire Wire(1);
-MPU6050 mpu(Wire);
+MPU6050 mpu(Wire, 0x68);
 
 float prev_yaw;
 float smoothing_factor = 0.8;
@@ -28,7 +26,6 @@ void SetupMPU(){
   Serial.println(mpu.GetGyroYOffset());
   Serial.print("GyroZ Offset = ");
   Serial.println(mpu.GetGyroZOffset());
-  Serial.println("Calibration complete!");
   Time = micros(); 
 }
 
@@ -42,7 +39,7 @@ void ReadFromMPU() {
   delta_yaw = (angle_yaw - prev_yaw) * 0.8;
   prev_yaw = angle_yaw;
 
-  if(angle_roll < -100 || angle_pitch < -100){crashed = true;}
+  if(angle_roll < -110 || angle_pitch < -110){crashed = true;}
   if(crashed)return;
 
 //  roll_mapped = map(angle_roll, -90,90,-40,40);
@@ -81,17 +78,19 @@ void ReadFromMPU() {
   ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
 
 
-//  minThrottle = input_THROTTLE;
+  int minThrTemp = minThrottle;
+  if(input_THROTTLE>minThrottle)
+      minThrTemp = input_THROTTLE;
   
   if(ESCout_1>maxThrottle) ESCout_1=maxThrottle;
-  else if(ESCout_1<minThrottle) ESCout_1=minThrottle;
+  else if(ESCout_1<minThrTemp) ESCout_1=minThrTemp;
   
   if(ESCout_2>maxThrottle) ESCout_2=maxThrottle;
-  else if(ESCout_2<minThrottle) ESCout_2=minThrottle;
+  else if(ESCout_2<minThrTemp) ESCout_2=minThrTemp;
   
   if(ESCout_3>maxThrottle) ESCout_3=maxThrottle;
-  else if(ESCout_3<minThrottle) ESCout_3=minThrottle;
+  else if(ESCout_3<minThrTemp) ESCout_3=minThrTemp;
   
   if(ESCout_4>maxThrottle) ESCout_4=maxThrottle;
-  else if(ESCout_4<minThrottle) ESCout_4=minThrottle;
+  else if(ESCout_4<minThrTemp) ESCout_4=minThrTemp;
 }
