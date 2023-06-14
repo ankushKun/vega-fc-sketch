@@ -65,21 +65,21 @@ void CalibrateESC(){
         loopThis = btnLow();
         while(loopThis){
           if(isLow){
-            esc1.write(0);
-            esc2.write(0);
-            esc3.write(0);
-            esc4.write(0);
+            esc1.write(20);
+            esc2.write(20);
+            esc3.write(20);
+            esc4.write(20);
             Serial.println("NO THROTTLE\t RELEASE BUTTON");
             loopThis = btnLow();
           }else{
-            for(int i=128;i>0;i--){
+            for(int i=128;i>20;i--){
               Serial.print("CURRENT THRORRLE: ");Serial.println(i);
               if(i%4==0)writeText((String)i);
               esc1.write(i);
               esc2.write(i);
               esc3.write(i);
               esc4.write(i);
-              if(i==1){
+              if(i==21){
                 isLow=true;
                 writeText("FLIP SWITCH");
               }
@@ -92,10 +92,10 @@ void CalibrateESC(){
         writeText("ACTIVATING ESCs");
         for(int i=0;i<128;i++){
           if(i%100==0){Serial.print(i/100);Serial.print("... ");}
-          esc1.write(0);
-          esc2.write(0);
-          esc3.write(0);
-          esc4.write(0);
+          esc1.write(20);
+          esc2.write(20);
+          esc3.write(20);
+          esc4.write(20);
           delay(2);
         }
         writeText("CALIBRATION COMPLETE");
