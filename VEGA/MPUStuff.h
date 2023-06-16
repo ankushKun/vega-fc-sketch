@@ -41,14 +41,21 @@ void ReadFromMPU() {
   delta_yaw = (angle_yaw - prev_yaw) * 0.8;
   prev_yaw = angle_yaw;
 
-  if(angle_roll < -110 || angle_pitch < -110){crashed = true;}
+  Serial.println(angle_roll);
+  Serial.println(angle_pitch);
+  Serial.println(angle_yaw);
+
+  delta_yaw = (angle_yaw - prev_yaw) * 0.8;
+  prev_yaw = angle_yaw;
+
+  if(angle_roll_output < -110 || angle_pitch_output < -110){crashed = true;}
   if(crashed){
     writeText("CRASHED");
     return;
   }
 
-//  roll_mapped = map(angle_roll, -90,90,-40,40);
-//  pitch_mapped = map(angle_pitch, -90,90,-40,40);
+  roll_mapped = map(angle_roll, -90,90,-40,40);
+  pitch_mapped = map(angle_pitch, -90,90,-40,40);
   yaw_mapped = mapf(delta_yaw, -2.0,2.0,-10.0,10.0);
 
   // Roll PID
@@ -81,6 +88,11 @@ void ReadFromMPU() {
   ESCout_2 = input_THROTTLE - roll_PID + pitch_PID + yaw_PID;
   ESCout_3 = input_THROTTLE - roll_PID - pitch_PID - yaw_PID;
   ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
+
+//  ESCout_1 = input_THROTTLE + roll_PID - pitch_PID;
+//  ESCout_2 = input_THROTTLE - roll_PID + pitch_PID;
+//  ESCout_3 = input_THROTTLE - roll_PID - pitch_PID;
+//  ESCout_4 = input_THROTTLE + roll_PID + pitch_PID;
 
   int minThrTemp = minThrottle;
   if(input_THROTTLE>minThrottle)

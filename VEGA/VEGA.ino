@@ -8,7 +8,7 @@ TwoWire Wire(0);
 #include "MPUStuff.h"
 #include "WiFi.h"
 
-unsigned long timer = 0;
+//unsigned long timer = 0;
 
 void setup() {
   delay(500);
@@ -24,18 +24,16 @@ void setup() {
   delay(1000);
   SetupESC();
   delay(1000);
-#ifdef ENABLE_WIFI
-  SetupWifi();
-#endif
+//  SetupWifi();
+//  delay(1000);
 }
 
 void loop() {
+#ifdef ENABLE_RECIEVER
   ReadReciever();
-  
-//#ifdef ENABLE_WIFI
-//  CheckUDP();
-//#endif
-
+#endif
+//  TalkToESP();
+//  checkForRequest();
   ReadFromMPU();
   WriteESC();
 
@@ -43,26 +41,27 @@ void loop() {
   Serial.print(">");
   Serial.print(angle_roll);Serial.print(" R ");
   Serial.print(angle_pitch);Serial.print(" P ");
+//  Serial.print(0);Serial.println(" Y ");
   Serial.print(delta_yaw);Serial.println(" Y ");
 //  Serial.print("Yaw mapped: ");Serial.println(yaw_mapped);
 //  Serial.println();
 
-  Serial.print("ESC3: ");Serial.print(ESCout_3);
-  Serial.print("  ESC1: ");Serial.println(ESCout_1);
-  Serial.print("ESC2: ");Serial.print(ESCout_2);
-  Serial.print("  ESC4: ");Serial.println(ESCout_4);
-
-  Serial.print("TR: ");Serial.print(throttleRaw);
-  Serial.print("  RR: ");Serial.print(rollRaw);
-  Serial.print("  PR: ");Serial.print(pitchRaw);
-  Serial.print("  YR: ");Serial.println(yawRaw);
+//  Serial.print("ESC3: ");Serial.print(ESCout_3);
+//  Serial.print("  ESC1: ");Serial.println(ESCout_1);
+//  Serial.print("ESC2: ");Serial.print(ESCout_2);
+//  Serial.print("  ESC4: ");Serial.println(ESCout_4);
+//
+//  Serial.print("TR: ");Serial.print(throttleRaw);
+//  Serial.print("  RR: ");Serial.print(rollRaw);
+//  Serial.print("  PR: ");Serial.print(pitchRaw);
+//  Serial.print("  YR: ");Serial.println(yawRaw);
+//  
+//  Serial.print("T: ");Serial.print(input_THROTTLE);
+//  Serial.print("  R: ");Serial.print(input_ROLL);
+//  Serial.print("  P: ");Serial.print(input_PITCH);
+//  Serial.print("  Y: ");Serial.println(input_YAW);
   
-  Serial.print("T: ");Serial.print(input_THROTTLE);
-  Serial.print("  R: ");Serial.print(input_ROLL);
-  Serial.print("  P: ");Serial.print(input_PITCH);
-  Serial.print("  Y: ");Serial.println(input_YAW);
-  
-  Serial.println();
+//  Serial.println();
 #endif
 
 delay(1);

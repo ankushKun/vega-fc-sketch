@@ -55,19 +55,19 @@ void SetupReciever(){
 void ReadReciever(){
 //   Serial.println("reading");
   throttleRaw = pulseIn(CH_THR, HIGH, 1000);
-  Serial.print("THROTTLE: ");Serial.print(throttleRaw);
+  LOG Serial.print("THROTTLE: ");Serial.print(throttleRaw);
   rollRaw = pulseIn(CH_ROL, HIGH, 1000);
-  Serial.print("\tROLL: ");Serial.print(rollRaw );
+  LOG Serial.print("\tROLL: ");Serial.print(rollRaw );
   pitchRaw = pulseIn(CH_PIT, HIGH, 1000);
-  Serial.print("\tPITCH: ");Serial.print(pitchRaw);
+  LOG Serial.print("\tPITCH: ");Serial.print(pitchRaw);
   yawRaw = pulseIn(CH_YAW, HIGH, 1000);
-  Serial.print("\tYAW: ");Serial.print(yawRaw);
+  LOG Serial.print("\tYAW: ");Serial.print(yawRaw);
   killRaw = pulseIn(CH_KIL, HIGH, 1000);
-  Serial.print("\tKILL: ");Serial.print(killRaw);
+  LOG Serial.print("\tKILL: ");Serial.print(killRaw);
   modeRaw = pulseIn(CH_MOD, HIGH, 1000);
-  Serial.print("\tMODE: ");Serial.print(modeRaw);
+  LOG Serial.print("\tMODE: ");Serial.print(modeRaw);
   btnRaw = pulseIn(CH_BTN, HIGH, 1000);
-  Serial.print("\tBTN: ");Serial.println(btnRaw);
+  LOG Serial.print("\tBTN: ");Serial.println(btnRaw);
 
   if(!killed && killRaw > 1500) killed = true;
 
@@ -82,5 +82,5 @@ void ReadReciever(){
   input_PITCH = map(pitchRaw, 1100, 2000, 90, -90); 
 }
 
-boolean btnHigh(){Serial.print("btnHigh ");Serial.print(btnRaw>1500);Serial.println(btnRaw);ReadReciever();return (boolean)(btnRaw>1500);}
-boolean btnLow(){Serial.print("btnHigh ");Serial.print(btnRaw>1500);Serial.println(btnRaw);ReadReciever();return (boolean)(btnRaw<=1500);}
+boolean btnHigh(){ReadReciever();return (boolean)(btnRaw>1500);}
+boolean btnLow(){return (boolean)(btnRaw<=1500);}

@@ -1,11 +1,20 @@
 
 ///// CONFIGS /////
 // Comment a line to disable
+
 #define DEBUG
-#define CALIBRATE_ESC
-#define CALIBRATE_MPU
+#define ENABLE_RECIEVER
 //#define CALIBRATE_RECIEVER
 //#define ENABLE_WIFI
+//#define CALIBRATE_ESC
+#define CALIBRATE_MPU
+
+#ifdef DEBUG
+  #define DEBUG_BOOL true
+#else
+  #define DEBUG_BOOL false
+#endif
+#define LOG if(DEBUG_BOOL)
 
 ///// VARS /////
 #define PUSH_BUTTON_1 18
@@ -30,10 +39,11 @@ int esc1mapped, esc2mapped, esc3mapped, esc4mapped;
 int input_PITCH = 0;
 int input_ROLL = 0;
 int input_YAW = 0;
-int input_THROTTLE=55;
+int input_THROTTLE=0;
 int state1,state2,state3,state4;
 
 ///// GYRO VARS /////
+//Declaring some global variables
 int16_t gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, temperature, acc_total_vector;
 float angle_pitch, angle_roll, angle_yaw;
 float delta_yaw;

@@ -21,15 +21,15 @@ void writeText(String txt){
 }
 
 void SetupOLED(){
-  Serial.println("INITIALISING OLED");
+  LOG Serial.println("INITIALISING OLED");
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
+    LOG Serial.println(F("SSD1306 allocation failed"));
     display = false;
   }
 //  display.setFont(&FreeSerif12pt7b);
   display.display();
   display.clearDisplay();
-  Serial.println("DONE!");
+  LOG Serial.println("DONE!");
   writeText("BLACK\nFALCON");
 }
 
