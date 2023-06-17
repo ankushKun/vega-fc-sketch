@@ -29,24 +29,24 @@ void SetupMPU(){
   Serial.print("GyroZ Offset = ");
   Serial.println(mpu.GetGyroZOffset());
   delay(4);
-  for(int i=0;i<2000;i++){
-    angleXoffset += mpu.GetAngX();
-    angleYoffset += mpu.GetAngY();
-    angleZoffset += mpu.GetAngZ();
-    delay(4);
-  }
-  angleXoffset /= 2000;
-  angleYoffset /= 2000;
-  angleZoffset /= 2000;
+//  for(int i=0;i<2000;i++){
+//    angleXoffset += mpu.GetAngX();
+//    angleYoffset += mpu.GetAngY();
+//    angleZoffset += mpu.GetAngZ();
+//    delay(4);
+//  }
+//  angleXoffset /= 2000;
+//  angleYoffset /= 2000;
+//  angleZoffset /= 2000;
   Time = micros();
 }
 
 void ReadFromMPU() {
   mpu.Execute();
   
-  angle_roll = mpu.GetAngY() - angleXoffset;
-  angle_pitch = mpu.GetAngX() - angleYoffset;
-  angle_yaw = mpu.GetAngZ() - angleZoffset;
+//  angle_roll = mpu.GetAngY() - angleXoffset;
+//  angle_pitch = mpu.GetAngX() - angleYoffset;
+//  angle_yaw = mpu.GetAngZ() - angleZoffset;
 
   angle_roll = mpu.GetAngY();
   angle_pitch = mpu.GetAngX();
@@ -61,8 +61,8 @@ void ReadFromMPU() {
     return;
   }
 
-  roll_mapped = map(angle_roll, -90,90,-40,40);
-  pitch_mapped = map(angle_pitch, -90,90,-40,40);
+//  roll_mapped = map(angle_roll, -90,90,-40,40);
+//  pitch_mapped = map(angle_pitch, -90,90,-40,40);
 //  yaw_mapped = mapf(delta_yaw, -2.0,2.0,-10.0,10.0);
 
   // Roll PID
@@ -70,14 +70,14 @@ void ReadFromMPU() {
   roll_integral += roll_error;
   roll_derivative = roll_error - roll_previous_error;
   roll_previous_error = roll_error;
-  float roll_PID = XY_Kp * roll_error + XY_Ki * roll_integral + XY_Kd * roll_derivative;
+  float roll_PID = roll_Kp * roll_error + roll_Ki * roll_integral + roll_Kd * roll_derivative;
   
   // Pitch PID
   pitch_error = angle_pitch - input_PITCH;
   pitch_integral += pitch_error;
   pitch_derivative = pitch_error - pitch_previous_error;
   pitch_previous_error = pitch_error;
-  float pitch_PID = XY_Kp * pitch_error + XY_Ki * pitch_integral + XY_Kd * pitch_derivative;
+  float pitch_PID = pitch_Kp * pitch_error + pitch_Ki * pitch_integral + pitch_Kd * pitch_derivative;
   
   // Yaw PID
   yaw_error = yaw_mapped - input_YAW;

@@ -5,7 +5,7 @@
 #define DEBUG
 //#define CALIBRATE_RECIEVER
 //#define ENABLE_WIFI
-#define CALIBRATE_ESC
+//#define CALIBRATE_ESC
 #define CALIBRATE_MPU
 
 #ifdef DEBUG
@@ -70,16 +70,20 @@ float pitch_derivative = 0;
 float pitch_previous_error = 0;
 
 // Roll and Pitch PID params
-float XY_Kp = 0.6;
-float XY_Ki = 0.000;
-float XY_Kd = 0.000;
+float roll_Kp = 1;
+float roll_Ki = 0.000;
+float roll_Kd = 0.000;
+
+float pitch_Kp = 1;
+float pitch_Ki = 0.000;
+float pitch_Kd = 0.000;
 
 // Yaw PID
 float yaw_error = 0;
 float yaw_integral = 0;
 float yaw_derivative = 0;
 float yaw_previous_error = 0;
-float yaw_Kp = 0.0;
+float yaw_Kp = 1;
 float yaw_Ki = 0.000;
 float yaw_Kd = 0.000;
 

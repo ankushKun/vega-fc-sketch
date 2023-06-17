@@ -108,26 +108,45 @@ void CalibrateESC(){
   }
 }
 
-void DetachESC(){
-  esc1.detach();
-  esc2.detach();
-  esc3.detach();
-  esc4.detach();
-  LOG Serial.println("ESCs Detached");
-//  writeText("   ESCs\nDETACHED");
-}
+//void DetachESC(){
+//  ESCout_1 = 0;
+//  ESCout_2 = 0;
+//  ESCout_3 = 0;
+//  ESCout_4 = 0;
+//  esc1.write(ESCout_1);
+//  esc2.write(ESCout_2);
+//  esc3.write(ESCout_3);
+//  esc4.write(ESCout_4);
+////  esc1.detach();
+////  esc2.detach();
+////  esc3.detach();
+////  esc4.detach();
+//  LOG Serial.println("ESCs Detached");
+////  writeText("   ESCs\nDETACHED");
+//}
 
-void AttachESC(){
+//void AttachESC(){
+//  ESCout_1 = 0;
+//  ESCout_2 = 0;
+//  ESCout_3 = 0;
+//  ESCout_4 = 0;
+//  esc1.write(ESCout_1);
+//  esc2.write(ESCout_2);
+//  esc3.write(ESCout_3);
+//  esc4.write(ESCout_4);
+//  esc1.attach(ESC1);
+//  esc2.attach(ESC2);
+//  esc3.attach(ESC3);
+//  esc4.attach(ESC4);
+//  LOG Serial.println("ESCs Attached");
+////  writeText("   ESCs\nATTACHED");
+//}
+
+void SetupESC(){
   esc1.attach(ESC1);
   esc2.attach(ESC2);
   esc3.attach(ESC3);
   esc4.attach(ESC4);
-  LOG Serial.println("ESCs Attached");
-//  writeText("   ESCs\nATTACHED");
-}
-
-void SetupESC(){
-  AttachESC();
   delay(1000);
 #ifdef CALIBRATE_ESC
   CalibrateESC();
@@ -140,7 +159,7 @@ void WriteESC(){
     ESCout_2 = 0;
     ESCout_3 = 0;
     ESCout_4 = 0;
-    DetachESC();
+//    DetachESC();
     if(killed){
       writeText("KILLED");
       LOG Serial.println("KILLED");

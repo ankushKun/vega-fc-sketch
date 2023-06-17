@@ -61,6 +61,6 @@ void loop() {
   
 //  Serial.println();
 #endif
-
-delayMicroseconds(4000);
+delay(10);
+//delayMicroseconds(4000);
 }
