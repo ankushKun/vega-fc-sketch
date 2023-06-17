@@ -30,19 +30,19 @@ void CalibrateESC(){
   boolean loopThis;
   #ifdef CALIBRATE_ESC
     writeText("FLIP SWITCH TO LOW");
-    LOG Serial.println("FLIP SWITCH TO LOW");
+    Serial.println("FLIP SWITCH TO LOW");
 //    for(boolean loopThis = btnHigh();loopThis;loopThis = btnHigh());
     loopThis = btnHigh();
     while(loopThis){loopThis = btnHigh();} // wait till user goes from high to low
     writeText("ESC CALIBRAION\nREMOVE POWER FROM ESC\nFLIP CALIBRATION SWITCH");
-    LOG Serial.println("STARTING ESC CALIBRATION...\tREMOVE POWER FROM ESCs\t Flip Switch");
+    Serial.println("STARTING ESC CALIBRATION...\tREMOVE POWER FROM ESCs\t Flip Switch");
     loopThis = btnLow();
     while(loopThis){loopThis = btnLow();} // wait till user goes from low to high
-    LOG Serial.println("GIVING FULL THROTTLE");
+    Serial.println("GIVING FULL THROTTLE");
     writeText("GIVING FULL THROTTLE");
     delay(2000);
   #else
-    LOG Serial.println("CALIBRATE ESC WAS CALLED EVEN WHEN CALIBRATE_ESC IS FALSE");
+    Serial.println("CALIBRATE ESC WAS CALLED EVEN WHEN CALIBRATE_ESC IS FALSE");
     return;
   #endif
 
@@ -58,10 +58,10 @@ void CalibrateESC(){
         writeText("GIVE POWER TO ESC\nFLIP SWITCH TO LOW");
         printed = true;
       }
-      LOG Serial.print("GIVE POWER TO ESCs NOW \tFULL THROTTLE\t");
+      Serial.print("GIVE POWER TO ESCs NOW \tFULL THROTTLE\t");
       if(btnLow()){
         calibrated = true;
-        LOG Serial.println("BTN1 PUSH DETECTED \tLOWERING THROTTLE");
+        Serial.println("BTN1 PUSH DETECTED \tLOWERING THROTTLE");
         loopThis = btnLow();
         while(loopThis){
           if(isLow){
@@ -69,11 +69,11 @@ void CalibrateESC(){
             esc2.write(20);
             esc3.write(20);
             esc4.write(20);
-            LOG Serial.println("NO THROTTLE\t RELEASE BUTTON");
+            Serial.println("NO THROTTLE\t RELEASE BUTTON");
             loopThis = btnLow();
           }else{
             for(int i=128;i>20;i--){
-              LOG {Serial.print("CURRENT THRORRLE: ");Serial.println(i);}
+              Serial.print("CURRENT THRORRLE: ");Serial.println(i);
               if(i%4==0)writeText((String)i);
               esc1.write(i);
               esc2.write(i);
@@ -88,10 +88,10 @@ void CalibrateESC(){
           }
           loopThis = btnLow();
         }
-        LOG Serial.print("WAITING FOR ESCs TO ACTIVATE ");
+        Serial.print("WAITING FOR ESCs TO ACTIVATE ");
         writeText("ACTIVATING ESCs");
         for(int i=0;i<128;i++){
-          if(i%100==0){LOG {Serial.print(i/100);Serial.print("... ");}}
+          if(i%100==0){Serial.print(i/100);Serial.print("... ");}
           esc1.write(20);
           esc2.write(20);
           esc3.write(20);
@@ -99,7 +99,7 @@ void CalibrateESC(){
           delay(2);
         }
         writeText("CALIBRATION COMPLETE");
-        LOG Serial.println("CALIBRATION DONE!");
+        Serial.println("CALIBRATION DONE!");
         delay(3000);
         
         break;
@@ -114,7 +114,7 @@ void DetachESC(){
   esc3.detach();
   esc4.detach();
   LOG Serial.println("ESCs Detached");
-  writeText("   ESCs\nDETACHED");
+//  writeText("   ESCs\nDETACHED");
 }
 
 void AttachESC(){
@@ -123,7 +123,7 @@ void AttachESC(){
   esc3.attach(ESC3);
   esc4.attach(ESC4);
   LOG Serial.println("ESCs Attached");
-  writeText("   ESCs\nATTACHED");
+//  writeText("   ESCs\nATTACHED");
 }
 
 void SetupESC(){

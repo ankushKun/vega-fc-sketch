@@ -40,7 +40,7 @@ int y = 7;
 
 void displayESCVals(){
   if(killed || crashed || !armed)return;
-  if((prevDisp - micros()) > 250){
+  if((prevDisp - micros()) > 300){
     display.clearDisplay();
     display.setCursor(x,y);
     display.print(ESCout_3);

@@ -15,11 +15,11 @@ void SetupMPU(){
   mpu.Initialize();
   #ifdef CALIBRATE_MPU
   Serial.println("CALIBRATING MPU, DONOT MOVE");
-  writeText("CALIBRATING\nMPU");
+  writeText("CALIBRATING MPU");
   delay(1000);
   mpu.Calibrate();
   Serial.println("Calibration complete!");
-  writeText("DONE!");
+  writeText("DONE!\nPOWER ON TRANSMITTER");
   #endif
   Serial.println("MPU Offsets:");
   Serial.print("GyroX Offset = ");
@@ -28,27 +28,34 @@ void SetupMPU(){
   Serial.println(mpu.GetGyroYOffset());
   Serial.print("GyroZ Offset = ");
   Serial.println(mpu.GetGyroZOffset());
+  delay(4);
+  for(int i=0;i<2000;i++){
+    angleXoffset += mpu.GetAngX();
+    angleYoffset += mpu.GetAngY();
+    angleZoffset += mpu.GetAngZ();
+    delay(4);
+  }
+  angleXoffset /= 2000;
+  angleYoffset /= 2000;
+  angleZoffset /= 2000;
   Time = micros();
 }
 
 void ReadFromMPU() {
   mpu.Execute();
   
+  angle_roll = mpu.GetAngY() - angleXoffset;
+  angle_pitch = mpu.GetAngX() - angleYoffset;
+  angle_yaw = mpu.GetAngZ() - angleZoffset;
+
   angle_roll = mpu.GetAngY();
   angle_pitch = mpu.GetAngX();
   angle_yaw = mpu.GetAngZ();
 
-  delta_yaw = (angle_yaw - prev_yaw) * 0.8;
-  prev_yaw = angle_yaw;
+//  delta_yaw = (angle_yaw - prev_yaw) * 0.8;
+//  prev_yaw = angle_yaw;
 
-  Serial.println(angle_roll);
-  Serial.println(angle_pitch);
-  Serial.println(angle_yaw);
-
-  delta_yaw = (angle_yaw - prev_yaw) * 0.8;
-  prev_yaw = angle_yaw;
-
-  if(angle_roll_output < -110 || angle_pitch_output < -110){crashed = true;}
+  if(angle_roll_output < -100 || angle_pitch_output < -100){crashed = true;}
   if(crashed){
     writeText("CRASHED");
     return;
@@ -56,7 +63,7 @@ void ReadFromMPU() {
 
   roll_mapped = map(angle_roll, -90,90,-40,40);
   pitch_mapped = map(angle_pitch, -90,90,-40,40);
-  yaw_mapped = mapf(delta_yaw, -2.0,2.0,-10.0,10.0);
+//  yaw_mapped = mapf(delta_yaw, -2.0,2.0,-10.0,10.0);
 
   // Roll PID
   roll_error = angle_roll - input_ROLL;
@@ -84,15 +91,15 @@ void ReadFromMPU() {
 //  ESCout_3 = input_THROTTLE - roll_mapped - pitch_mapped - yaw_mapped;
 //  ESCout_4 = input_THROTTLE + roll_mapped + pitch_mapped - yaw_mapped;
 
-  ESCout_1 = input_THROTTLE + roll_PID - pitch_PID + yaw_PID;
-  ESCout_2 = input_THROTTLE - roll_PID + pitch_PID + yaw_PID;
-  ESCout_3 = input_THROTTLE - roll_PID - pitch_PID - yaw_PID;
-  ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
+//  ESCout_1 = input_THROTTLE + roll_PID - pitch_PID + yaw_PID;
+//  ESCout_2 = input_THROTTLE - roll_PID + pitch_PID + yaw_PID;
+//  ESCout_3 = input_THROTTLE - roll_PID - pitch_PID - yaw_PID;
+//  ESCout_4 = input_THROTTLE + roll_PID + pitch_PID - yaw_PID;
 
-//  ESCout_1 = input_THROTTLE + roll_PID - pitch_PID;
-//  ESCout_2 = input_THROTTLE - roll_PID + pitch_PID;
-//  ESCout_3 = input_THROTTLE - roll_PID - pitch_PID;
-//  ESCout_4 = input_THROTTLE + roll_PID + pitch_PID;
+  ESCout_1 = input_THROTTLE + roll_PID - pitch_PID;
+  ESCout_2 = input_THROTTLE - roll_PID + pitch_PID;
+  ESCout_3 = input_THROTTLE - roll_PID - pitch_PID;
+  ESCout_4 = input_THROTTLE + roll_PID + pitch_PID;
 
   int minThrTemp = minThrottle;
   if(input_THROTTLE>minThrottle)

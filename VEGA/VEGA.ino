@@ -1,7 +1,7 @@
 #include <Wire.h>
 TwoWire Wire(0);
 
-#include "_GLOBAL.h"
+#include "GLOBALS.h"
 #include "OLED.h"
 #include "Reciever.h"
 #include "BLDC.h"
@@ -19,20 +19,18 @@ void setup() {
   delay(1000);
   SetupReciever();
   delay(1000);
+  SetupWifi();
+  delay(1000);
 //  CalibrateReciever();
   SetupMPU();
   delay(1000);
   SetupESC();
   delay(1000);
-//  SetupWifi();
-//  delay(1000);
 }
 
 void loop() {
-#ifdef ENABLE_RECIEVER
   ReadReciever();
-#endif
-//  TalkToESP();
+  ReadESP();
 //  checkForRequest();
   ReadFromMPU();
   WriteESC();
@@ -41,8 +39,8 @@ void loop() {
   Serial.print(">");
   Serial.print(angle_roll);Serial.print(" R ");
   Serial.print(angle_pitch);Serial.print(" P ");
-//  Serial.print(0);Serial.println(" Y ");
-  Serial.print(delta_yaw);Serial.println(" Y ");
+  Serial.print(0);Serial.println(" Y ");
+//  Serial.print(delta_yaw);Serial.println(" Y ");
 //  Serial.print("Yaw mapped: ");Serial.println(yaw_mapped);
 //  Serial.println();
 
@@ -64,5 +62,5 @@ void loop() {
 //  Serial.println();
 #endif
 
-delay(1);
+delayMicroseconds(4000);
 }

@@ -1,5 +1,3 @@
-#include <pwm.h>
-
 #define CH_ROL 0  // roll        -> channel 1
 #define CH_PIT 1  // pitch       -> channel 2
 #define CH_THR 2  // throttle    -> channel 3
@@ -54,20 +52,27 @@ void SetupReciever(){
 
 void ReadReciever(){
 //   Serial.println("reading");
-  throttleRaw = pulseIn(CH_THR, HIGH, 1000);
-  LOG Serial.print("THROTTLE: ");Serial.print(throttleRaw);
-  rollRaw = pulseIn(CH_ROL, HIGH, 1000);
-  LOG Serial.print("\tROLL: ");Serial.print(rollRaw );
-  pitchRaw = pulseIn(CH_PIT, HIGH, 1000);
-  LOG Serial.print("\tPITCH: ");Serial.print(pitchRaw);
-  yawRaw = pulseIn(CH_YAW, HIGH, 1000);
-  LOG Serial.print("\tYAW: ");Serial.print(yawRaw);
-  killRaw = pulseIn(CH_KIL, HIGH, 1000);
-  LOG Serial.print("\tKILL: ");Serial.print(killRaw);
-  modeRaw = pulseIn(CH_MOD, HIGH, 1000);
-  LOG Serial.print("\tMODE: ");Serial.print(modeRaw);
-  btnRaw = pulseIn(CH_BTN, HIGH, 1000);
-  LOG Serial.print("\tBTN: ");Serial.println(btnRaw);
+//  throttleRaw = 0;
+//  rollRaw = 0;
+//  pitchRaw = 0;
+//  yawRaw = 0;
+//  killRaw = 0;
+//  modeRaw = 0;
+//  btnRaw = 0;
+  throttleRaw = pulseIn(CH_THR, HIGH);
+  LOG {Serial.print("THROTTLE: ");Serial.print(throttleRaw);}
+  rollRaw = pulseIn(CH_ROL, HIGH);
+  LOG {Serial.print("\tROLL: ");Serial.print(rollRaw);}
+  pitchRaw = pulseIn(CH_PIT, HIGH);
+  LOG {Serial.print("\tPITCH: ");Serial.print(pitchRaw);}
+  yawRaw = pulseIn(CH_YAW, HIGH);
+  LOG {Serial.print("\tYAW: ");Serial.print(yawRaw);}
+  killRaw = pulseIn(CH_KIL, HIGH);
+  LOG {Serial.print("\tKILL: ");Serial.print(killRaw);}
+  modeRaw = pulseIn(CH_MOD, HIGH);
+  LOG {Serial.print("\tMODE: ");Serial.print(modeRaw);}
+  btnRaw = pulseIn(CH_BTN, HIGH);
+  LOG {Serial.print("\tBTN: ");Serial.println(btnRaw);}
 
   if(!killed && killRaw > 1500) killed = true;
 
@@ -83,4 +88,4 @@ void ReadReciever(){
 }
 
 boolean btnHigh(){ReadReciever();return (boolean)(btnRaw>1500);}
-boolean btnLow(){return (boolean)(btnRaw<=1500);}
+boolean btnLow(){ReadReciever();return (boolean)(btnRaw<=1500);}

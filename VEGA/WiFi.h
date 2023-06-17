@@ -14,7 +14,7 @@ char payload[250]={0,};
 int timeout=3;
 
 void sendCommand(String cmd, long int timeoutSeconds){
-  esp.print(cmd);esp.print("\r\n");
+  esp.print(cmd);esp.println("\r\n");
   long int now = micros();
   while(now+(timeoutSeconds*1000000) > micros()){
     if(esp.available()){
@@ -35,15 +35,15 @@ void sendCommand(String cmd, long int timeoutSeconds){
 //  sendCommand("AT+");
 //  sendCommand("AT", 1); // OK
 //  sendCommand("AT+GMR", 1); // Board details
-//  sendCommand("AT+CWAUTOCONN=0\", 1);
+//  sendCommand("AT+CWAUTOCONN=0", 1);
   sendCommand("AT+CWMODE=2", 1); // 3 -> bo90zth AP and Station mode, 2 -> hotspot
-  sendCommand("AT+CWSAP=\"DEESHA - VEGA\",\"yametekudasai\",5,4",3);
+  sendCommand("AT+CWSAP=\"DEESHA - VEGA\",\"yametekudasai\",0,4",3);
 //  sendCommand("AT+CWLAP", 5); // List APs
 //  sendCommand("AT+CWJAP=\"VEGA_DRONE\",\"BlackFalcon69\"", 10); // Connect
-  sendCommand("AT+CIFSR", 2); // IP
   sendCommand("AT+CIPMUX=1", 2); // Enable multiple connections
-//  sendCommand("AT+CIPSTART=0,\"UDP\",\"0.0.0.0\",4445,4445,2", 5);
-sendCommand("AT+CIPSERVER=1,8080\r\n",3);
+  sendCommand("AT+CIPSTART=0,\"TCP\",\"0.0.0.0\",4445,4445,2", 5);
+  sendCommand("AT+CIPSERVER=0,8080\r\n",3);
+  sendCommand("AT+CIFSR", 2); // IP
 delay(1000);
 }
 
@@ -86,20 +86,11 @@ delay(1000);
 //  }
 //}
 //
-//void TalkToESP(){
-//  if(Serial.available()){
-//    String cmd = "";
-//    while(Serial.available()){
-//      char c = (char)Serial.read();
-//      cmd += c;
-//    }
-//    Serial.print(cmd);
-//    esp.print(cmd);
-//  }
-//  if(esp.available()){
-//    while(esp.available()){
-//      char c = (char)esp.read();
-//      Serial.write(c);
-//    }
-//  }
-//}
+void ReadESP(){
+  if(esp.available()){
+    while(esp.available()){
+      char c = (char)esp.read();
+      Serial.print(c);
+    }
+  }
+}
