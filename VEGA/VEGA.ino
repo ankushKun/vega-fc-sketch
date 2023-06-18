@@ -31,7 +31,6 @@ void setup() {
 void loop() {
   ReadReciever();
   ReadESP();
-//  checkForRequest();
   ReadFromMPU();
   WriteESC();
 
@@ -39,15 +38,15 @@ void loop() {
   Serial.print(">");
   Serial.print(angle_roll);Serial.print(" R ");
   Serial.print(angle_pitch);Serial.print(" P ");
-  Serial.print(0);Serial.println(" Y ");
+  Serial.print(angle_yaw);Serial.println(" Y ");
 //  Serial.print(delta_yaw);Serial.println(" Y ");
 //  Serial.print("Yaw mapped: ");Serial.println(yaw_mapped);
 //  Serial.println();
 
-//  Serial.print("ESC3: ");Serial.print(ESCout_3);
-//  Serial.print("  ESC1: ");Serial.println(ESCout_1);
-//  Serial.print("ESC2: ");Serial.print(ESCout_2);
-//  Serial.print("  ESC4: ");Serial.println(ESCout_4);
+  Serial.print("ESC3: ");Serial.print(ESCout_3);
+  Serial.print("  ESC1: ");Serial.println(ESCout_1);
+  Serial.print("ESC2: ");Serial.print(ESCout_2);
+  Serial.print("  ESC4: ");Serial.println(ESCout_4);
 //
 //  Serial.print("TR: ");Serial.print(throttleRaw);
 //  Serial.print("  RR: ");Serial.print(rollRaw);
@@ -61,6 +60,6 @@ void loop() {
   
 //  Serial.println();
 #endif
-delay(10);
+delay(3);
 //delayMicroseconds(4000);
 }

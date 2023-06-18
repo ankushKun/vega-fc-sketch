@@ -162,13 +162,13 @@ void WriteESC(){
 //    DetachESC();
     if(killed){
       writeText("KILLED");
-      LOG Serial.println("KILLED");
+//      LOG Serial.println("KILLED");
     } else if(!armed){
       writeText("UNARMED");
-      LOG Serial.println("UNARMED");
+//      LOG Serial.println("UNARMED");
     } else if(crashed){
       writeText("CRASHED");
-      LOG Serial.println("CRASHED");
+//      LOG Serial.println("CRASHED");
     }
   }
   esc1.write(ESCout_1);

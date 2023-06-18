@@ -28,16 +28,19 @@ void SetupMPU(){
   Serial.println(mpu.GetGyroYOffset());
   Serial.print("GyroZ Offset = ");
   Serial.println(mpu.GetGyroZOffset());
-  delay(4);
-//  for(int i=0;i<2000;i++){
-//    angleXoffset += mpu.GetAngX();
-//    angleYoffset += mpu.GetAngY();
-//    angleZoffset += mpu.GetAngZ();
-//    delay(4);
+  delay(3);
+  mpu.Execute();
+  rollOffset = mpu.GetAngY();
+  pitchOffset = mpu.GetAngX();
+  Serial.print("Flat Roll: ");Serial.println(rollOffset);
+  Serial.print("Flat Pitch: ");Serial.println(pitchOffset);
+//  for(int i=0;i<100;i++){
+//    rollOffset += mpu.GetAngX();
+//    pitchOffset += mpu.GetAngY();
+//    delay(3);
 //  }
-//  angleXoffset /= 2000;
-//  angleYoffset /= 2000;
-//  angleZoffset /= 2000;
+//  rollOffset /= 100.0;
+//  pitchOffset /= 100.0;
   Time = micros();
 }
 
@@ -52,10 +55,13 @@ void ReadFromMPU() {
   angle_pitch = mpu.GetAngX();
   angle_yaw = mpu.GetAngZ();
 
+//  angle_roll -= rollOffset;
+//  angle_pitch -= pitchOffset;
+
 //  delta_yaw = (angle_yaw - prev_yaw) * 0.8;
 //  prev_yaw = angle_yaw;
 
-  if(angle_roll_output < -100 || angle_pitch_output < -100){crashed = true;}
+  if(angle_roll_output < -90 || angle_pitch_output < -90){crashed = true;}
   if(crashed){
     writeText("CRASHED");
     return;

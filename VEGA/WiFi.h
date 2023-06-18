@@ -1,8 +1,8 @@
-#include <esp8266.h>
-//#include <Adafruit_ESP8266.h>
+//#include <esp8266.h>
+#include <UARTClass.h>
 
-ESP8266Class esp(1);
-//Adafruit_ESP8266 wifi(&esp, &Serial, -1);
+//ESP8266Class esp(1);
+UARTClass esp(1);
 
 int countTrueCommand;
 int countTimeCommand; 
@@ -14,7 +14,7 @@ char payload[250]={0,};
 int timeout=3;
 
 void sendCommand(String cmd, long int timeoutSeconds){
-  esp.print(cmd);esp.println("\r\n");
+  esp.print(cmd);esp.print("\r\n");
   long int now = micros();
   while(now+(timeoutSeconds*1000000) > micros()){
     if(esp.available()){
@@ -29,20 +29,19 @@ void sendCommand(String cmd, long int timeoutSeconds){
   return;
 #endif
   Serial.println("SETTING UP WIFI");
-  esp.begin(9200);
+  esp.begin(9600);
   delay(500);
   sendCommand("AT+RST", 1); // OK
-//  sendCommand("AT+");
 //  sendCommand("AT", 1); // OK
 //  sendCommand("AT+GMR", 1); // Board details
 //  sendCommand("AT+CWAUTOCONN=0", 1);
-  sendCommand("AT+CWMODE=2", 1); // 3 -> bo90zth AP and Station mode, 2 -> hotspot
-  sendCommand("AT+CWSAP=\"DEESHA - VEGA\",\"yametekudasai\",0,4",3);
+  sendCommand("AT+CWMODE=3", 1); // 3 -> bo90zth AP and Station mode, 2 -> hotspot
+  sendCommand("AT+CIPMUX=1", 2); // Enable multiple connections
 //  sendCommand("AT+CWLAP", 5); // List APs
 //  sendCommand("AT+CWJAP=\"VEGA_DRONE\",\"BlackFalcon69\"", 10); // Connect
-  sendCommand("AT+CIPMUX=1", 2); // Enable multiple connections
-  sendCommand("AT+CIPSTART=0,\"TCP\",\"0.0.0.0\",4445,4445,2", 5);
-  sendCommand("AT+CIPSERVER=0,8080\r\n",3);
+//  sendCommand("AT+CIPSTART=0,\"TCP\",\"0.0.0.0\",4445,4445,2", 5);
+  sendCommand("AT+CWSAP=\"DEESHA - VEGA\",\"yametekudasai\",1,4",3);
+  sendCommand("AT+CIPSERVER=1,80",3);
   sendCommand("AT+CIFSR", 2); // IP
 delay(1000);
 }

@@ -54,7 +54,7 @@ float elapsedTime;
 long Time = micros(), timePrev, time2;
 long gyro_x_cal, gyro_y_cal, gyro_z_cal;
 double offsetX,offsetY,offsetZ;
-double angleXoffset=0, angleYoffset=0, angleZoffset=0;
+double rollOffset=0.0, pitchOffset=0.0, yawOffset=0.0;
 
 ///// PID VARS /////
 // Roll PID
