@@ -30,17 +30,17 @@ void SetupMPU(){
   Serial.println(mpu.GetGyroZOffset());
   delay(3);
   mpu.Execute();
-  rollOffset = mpu.GetAngY();
-  pitchOffset = mpu.GetAngX();
+  rollOffset = 0.0;
+  pitchOffset = 0.0;
+  for(int i=0;i<100;i++){
+    rollOffset += mpu.GetAngX();
+    pitchOffset += mpu.GetAngY();
+    delay(3);
+  }
+  rollOffset /= 100.0;
+  pitchOffset /= 100.0;
   Serial.print("Flat Roll: ");Serial.println(rollOffset);
   Serial.print("Flat Pitch: ");Serial.println(pitchOffset);
-//  for(int i=0;i<100;i++){
-//    rollOffset += mpu.GetAngX();
-//    pitchOffset += mpu.GetAngY();
-//    delay(3);
-//  }
-//  rollOffset /= 100.0;
-//  pitchOffset /= 100.0;
   Time = micros();
 }
 

@@ -5,7 +5,7 @@
 #define DEBUG
 //#define CALIBRATE_RECIEVER
 //#define ENABLE_WIFI
-//#define CALIBRATE_ESC
+#define CALIBRATE_ESC
 #define CALIBRATE_MPU
 
 #ifdef DEBUG

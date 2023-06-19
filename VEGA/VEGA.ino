@@ -13,7 +13,7 @@ TwoWire Wire(0);
 void setup() {
   delay(500);
   Serial.begin(115200);
-  Serial.println("\n\n>>> BOOTED");
+  Serial.println("\n\nBOOTED");
 
   SetupOLED();
   delay(1000);
@@ -30,7 +30,7 @@ void setup() {
 
 void loop() {
   ReadReciever();
-  ReadESP();
+//  ReadESP();
   ReadFromMPU();
   WriteESC();
 
@@ -43,10 +43,10 @@ void loop() {
 //  Serial.print("Yaw mapped: ");Serial.println(yaw_mapped);
 //  Serial.println();
 
-  Serial.print("ESC3: ");Serial.print(ESCout_3);
-  Serial.print("  ESC1: ");Serial.println(ESCout_1);
-  Serial.print("ESC2: ");Serial.print(ESCout_2);
-  Serial.print("  ESC4: ");Serial.println(ESCout_4);
+//  Serial.print("ESC3: ");Serial.print(ESCout_3);
+//  Serial.print("  ESC1: ");Serial.println(ESCout_1);
+//  Serial.print("ESC2: ");Serial.print(ESCout_2);
+//  Serial.print("  ESC4: ");Serial.println(ESCout_4);
 //
 //  Serial.print("TR: ");Serial.print(throttleRaw);
 //  Serial.print("  RR: ");Serial.print(rollRaw);
@@ -60,6 +60,7 @@ void loop() {
   
 //  Serial.println();
 #endif
-delay(3);
+//delay(3);
+delay(10);
 //delayMicroseconds(4000);
 }

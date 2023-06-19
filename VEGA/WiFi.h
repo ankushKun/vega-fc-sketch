@@ -11,7 +11,7 @@ int valSensor = 1;
 char atcommand[250]={0,};
 char data[250]={0,};
 char payload[250]={0,};
-int timeout=3;
+int timeout=3;S
 
 void sendCommand(String cmd, long int timeoutSeconds){
   esp.print(cmd);esp.print("\r\n");
