@@ -33,10 +33,10 @@ void LoopMOTOR(){
 //  ESCout_4 = input_THROTTLE - input_ROLL + input_PITCH - input_YAW;
 
   
-  ESCout_1 = input_THROTTLE + rollAdjusted - pitchAdjusted + yawAdjusted;
-  ESCout_2 = input_THROTTLE - rollAdjusted + pitchAdjusted + yawAdjusted;
-  ESCout_3 = input_THROTTLE - rollAdjusted - pitchAdjusted - yawAdjusted;
-  ESCout_4 = input_THROTTLE + rollAdjusted + pitchAdjusted - yawAdjusted;
+  ESCout_1 = input_THROTTLE + rollAdjusted + pitchAdjusted + input_YAW;
+  ESCout_2 = input_THROTTLE - rollAdjusted - pitchAdjusted + input_YAW;
+  ESCout_3 = input_THROTTLE - rollAdjusted + pitchAdjusted - input_YAW;
+  ESCout_4 = input_THROTTLE + rollAdjusted - pitchAdjusted - input_YAW;
 
 
   ESCout_1 = constrain(ESCout_1, sigMin, sigMax);
