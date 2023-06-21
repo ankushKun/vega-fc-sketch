@@ -1,92 +1,111 @@
-void kalman_1d(float KalmanState, float KalmanUncertainty, float KalmanInput, float KalmanMeasurement) {
-  KalmanState=KalmanState+0.004*KalmanInput;
-  KalmanUncertainty=KalmanUncertainty + 0.1 * 0.1 * 10 * 10;
-  float KalmanGain=KalmanUncertainty * 1/(1*KalmanUncertainty + 3 * 3);
-  KalmanState=KalmanState+KalmanGain * (KalmanMeasurement-KalmanState);
-  KalmanUncertainty=(1-KalmanGain) * KalmanUncertainty;
-  Kalman1DOutput[0]=KalmanState; 
-  Kalman1DOutput[1]=KalmanUncertainty;
-}
+#include "MPU9250.h"
+MPU9250 mpu;
 
-void gyro_signals() {
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1A);
-  Wire.write(0x05);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1C);
-  Wire.write(0x10);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x68);
-  Wire.write(0x3B);
-  Wire.endTransmission(); 
-  Wire.requestFrom(0x68,6);
-  int16_t AccXLSB = Wire.read() << 8 | Wire.read();
-  int16_t AccYLSB = Wire.read() << 8 | Wire.read();
-  int16_t AccZLSB = Wire.read() << 8 | Wire.read();
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1B); 
-  Wire.write(0x8);
-  Wire.endTransmission();     
-  Wire.beginTransmission(0x68);
-  Wire.write(0x43);
-  Wire.endTransmission();
-  Wire.requestFrom(0x68,6);
-  int16_t GyroX=Wire.read()<<8 | Wire.read();
-  int16_t GyroY=Wire.read()<<8 | Wire.read();
-  int16_t GyroZ=Wire.read()<<8 | Wire.read();
-  RateRoll=(float)GyroX/65.5;
-  RatePitch=(float)GyroY/65.5;
-  RateYaw=(float)GyroZ/65.5;
-  
-  // SET CALIBRATION VALUES HERE
-  // ACC should be == 1
-  AccX=(float)AccXLSB/4096 - 0.01;
-  AccY=(float)AccYLSB/4096 + 0.01;
-  AccZ=(float)AccZLSB/4096 - 0.10;
-
-//  Serial.print("X: ");Serial.print(AccX);
-//  Serial.print(" Y: ");Serial.print(AccY);
-//  Serial.print(" Z: ");Serial.println(AccZ);
-
-  // ADJUST CALIBRATION ID NEEDED
-  AngleRoll=-atan(AccX/sqrt(AccY*AccY+AccZ*AccZ))*1/(3.142/180) + 2.3;
-  AnglePitch=atan(AccY/sqrt(AccX*AccX+AccZ*AccZ))*1/(3.142/180);
+void print_calibration() {
+    Serial.println("< calibration parameters >");
+    Serial.println("accel bias [g]: ");
+    Serial.print(mpu.getAccBiasX() * 1000.f / (float)MPU9250::CALIB_ACCEL_SENSITIVITY);
+    Serial.print(", ");
+    Serial.print(mpu.getAccBiasY() * 1000.f / (float)MPU9250::CALIB_ACCEL_SENSITIVITY);
+    Serial.print(", ");
+    Serial.print(mpu.getAccBiasZ() * 1000.f / (float)MPU9250::CALIB_ACCEL_SENSITIVITY);
+    Serial.println();
+    Serial.println("gyro bias [deg/s]: ");
+    Serial.print(mpu.getGyroBiasX() / (float)MPU9250::CALIB_GYRO_SENSITIVITY);
+    Serial.print(", ");
+    Serial.print(mpu.getGyroBiasY() / (float)MPU9250::CALIB_GYRO_SENSITIVITY);
+    Serial.print(", ");
+    Serial.print(mpu.getGyroBiasZ() / (float)MPU9250::CALIB_GYRO_SENSITIVITY);
+    Serial.println();
+    Serial.println("mag bias [mG]: ");
+    Serial.print(mpu.getMagBiasX());
+    Serial.print(", ");
+    Serial.print(mpu.getMagBiasY());
+    Serial.print(", ");
+    Serial.print(mpu.getMagBiasZ());
+    Serial.println();
+    Serial.println("mag scale []: ");
+    Serial.print(mpu.getMagScaleX());
+    Serial.print(", ");
+    Serial.print(mpu.getMagScaleY());
+    Serial.print(", ");
+    Serial.print(mpu.getMagScaleZ());
+    Serial.println();
 }
 
 void SetupIMU(){
-  Wire.setClock(400000);
-  Wire.begin();
-  delay(250);
-  Wire.beginTransmission(0x68); 
-  Wire.write(0x6B);
-  Wire.write(0x00);
-  Wire.endTransmission();
-  Serial.print("CALIBRATING IMU... ");
-  for (RateCalibrationNumber=0;
-         RateCalibrationNumber<2000; 
-         RateCalibrationNumber ++) {
-    gyro_signals();
-    RateCalibrationRoll+=RateRoll;
-    RateCalibrationPitch+=RatePitch;
-    RateCalibrationYaw+=RateYaw;
-    delay(1);
+  delay(2000);
+  if (!mpu.setup(0x68)) {
+        while (1) {
+            Serial.println("MPU connection failed. Please check your connection with `connection_check` example.");
+            oledPrint("IMU NOT\nFOUND",2,true,true,true);
+            delay(5000);
+        }
+    }
+  delay(3000);
+  mpu.verbose(true);
+//  mpu.setMagneticDeclination(1.73);
+  #ifdef CALIBRATE_IMU
+  Serial.println("Accel Gyro calibration will start in 5sec.");
+  Serial.println("Please leave the device still on the flat plane.");
+  oledPrint("PLACE DRONE ON\nFLAT SURFACE",1,true,true,true);
+  delay(2000);
+  oledPrint("CALIBRATING GYRO",1,true,true,true);
+  mpu.calibrateAccelGyro();
+  oledPrint("DONE",1,true,true,true);
+  delay(1000);
+  
+  Serial.println("Mag calibration will start in 5sec.");
+  Serial.println("Please Wave device in a figure eight until done.");
+  delay(2000);
+  oledPrint("CALIBRATING MAGNETOMETER\nMOVE IN 8 SHAPE",1,true,true,true);
+  mpu.calibrateMag();
+  print_calibration();
+  delay(1000);
+  #endif
+  Serial.println("PLACE DRONE ON A FLAT SURFACE");
+  oledPrint("PLACE DRONE ON FLAT SURFACE",1,true,true,true);
+  delay(7000);
+  float r=0.0,p=0.0,y=0.0;
+  for(int i=0;i<1001;i++){
+    mpu.update();
+    if(i>500){
+      r+=mpu.getPitch();
+      p+=mpu.getRoll();
+      y+=mpu.getYaw();
+    }
+    Serial.print("Roll ");
+    Serial.print(mpu.getRoll());
+    Serial.print(" Pitch ");
+    Serial.print(mpu.getPitch());
+    Serial.print(" Yaw ");
+    Serial.println(mpu.getYaw());
+    if(i%100==0){
+      oledPrint((String)((i/100)+1),1,true,false,false);
+      oledPrint(" ",1,false,false,true);
+    }
+    delay(10);
   }
-  RateCalibrationRoll/=2000;
-  RateCalibrationPitch/=2000;
-  RateCalibrationYaw/=2000;
-  Serial.println("DONE");
+  AngleRollOffset = r/500.0;
+  AnglePitchOffset = p/500.0;
+  AngleYawOffset = y/500.0;
+  Serial.print("RollOffset: ");Serial.println(AngleRollOffset);
+  Serial.print("PitchOffset: ");Serial.println(AnglePitchOffset);
+  Serial.print("YawOffset: ");Serial.println(AngleYawOffset);
+  
+  oledPrint("DONE",1,true,true,true);
+  delay(1000);
+//  mpu.verbose(false);
 }
 
 void LoopIMU(){
-  gyro_signals();
-  RateRoll-=RateCalibrationRoll;
-  RatePitch-=RateCalibrationPitch;
-  RateYaw-=RateCalibrationYaw;
-  kalman_1d(KalmanAngleRoll, KalmanUncertaintyAngleRoll, RateRoll, AngleRoll);
-  KalmanAngleRoll=Kalman1DOutput[0]; 
-  KalmanUncertaintyAngleRoll=Kalman1DOutput[1];
-  kalman_1d(KalmanAnglePitch, KalmanUncertaintyAnglePitch, RatePitch, AnglePitch);
-  KalmanAnglePitch=Kalman1DOutput[0]; 
-  KalmanUncertaintyAnglePitch=Kalman1DOutput[1];
+  mpu.update();
+// SWAP ROLL AND PITCH
+  AngleYaw = mpu.getYaw();
+  AngleYaw -= AngleYawOffset;
+//AngleYaw = 0;
+  AnglePitch = mpu.getRoll();
+  AnglePitch -= AnglePitchOffset;
+  AngleRoll = mpu.getPitch();
+  AngleRoll -= AngleRollOffset;
 }

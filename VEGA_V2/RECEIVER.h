@@ -1,17 +1,20 @@
 
-
 int mid(int min_, int max_){
   return ((min_+max_)/2);
 }
 
 void SetupRECEIVER(){
+  oledPrint("SETUP\nRECEIVER",2,true,true,true);
   Serial.print("SETTING UP RECEIVER... ");
   pinMode(CH_THR, INPUT);
   pinMode(CH_ROL, INPUT);
   pinMode(CH_PIT, INPUT);
   pinMode(CH_YAW, INPUT);
   pinMode(CH_KIL, INPUT);
+  pinMode(CH_MOD, INPUT);
+  pinMode(CH_BTN, INPUT);
   Serial.println("DONE");
+  oledPrint("DONE",2,true,true,true);
 }
 
 void LoopRECEIVER(){
@@ -29,35 +32,12 @@ void LoopRECEIVER(){
   delay(1);
   btnRaw = pulseIn(CH_BTN, HIGH);
 
-//  throttleMin = min(throttleMin, throttleRaw);
-//  throttleMax = max(throttleMax, throttleRaw);
-//  rollMin = min(rollMin, rollRaw);
-//  rollMax = max(rollMax, rollRaw);
-//  pitchMin = min(pitchMin, pitchRaw);
-//  pitchMax = max(pitchMax, pitchRaw);
-//  yawMin = min(yawMin, yawRaw);
-//  yawMax = max(yawMax, yawRaw);
-//  killMin = min(killMin, killRaw);
-//  killMax = max(killMax, killRaw);
-//  modeMin = min(modeMin, modeRaw);
-//  modeMax = max(modeMax, modeRaw);
-//  btnMin = min(btnMin, btnRaw);
-//  btnMax = max(btnMax, btnRaw);
+  if(!killed && killRaw > 1550) killed = true;
 
-  if(!killed && killRaw > mid(killMin, killMax)) killed = true;
+  if(modeRaw < 1500)armed = false;
+  else if(modeRaw>=1500)armed = true; 
 
-  if(modeRaw <= (mid(modeMin, modeMax))-100){
-    armed = false;
-  }else if(modeRaw>(mid(modeMin, modeMax))+100){
-    armed = true;
-  }
-
-//  input_THROTTLE = map(throttleRaw, throttleMin, throttleMax, sigMin, sigMax);
-//  input_ROLL = map(rollRaw, rollMin, rollMax, -40, 40);
-//  input_PITCH = map(pitchRaw, pitchMin, pitchMax, -40, 40);
-//  input_YAW = map(yawRaw, yawMin, yawMax, -40, 40);
-
-    input_THROTTLE = map(throttleRaw, sigMinRaw, sigMaxRaw, sigMin, sigMax);
+  input_THROTTLE = map(throttleRaw, sigMinRaw, sigMaxRaw, sigMin, sigMax);
   input_ROLL = map(rollRaw, sigMinRaw, sigMaxRaw, -40, 40);
   input_PITCH = map(pitchRaw, sigMinRaw, sigMaxRaw, -40, 40);
   input_YAW = map(yawRaw, sigMinRaw, sigMaxRaw, -40, 40);
@@ -67,3 +47,6 @@ void LoopRECEIVER(){
 //  input_PITCH = pitchRaw;
 //  input_YAW = yawRaw;
 }
+
+boolean btnHigh(){LoopRECEIVER();return (boolean)(btnRaw>1550);}
+boolean btnLow(){LoopRECEIVER();return (boolean)(btnRaw<=1550);}

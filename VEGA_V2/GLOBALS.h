@@ -1,6 +1,8 @@
-#include <Wire.h>
+//#include <Wire.h>
+//TwoWire Wire(0);
 
-TwoWire Wire(0);
+#define CALIBRATE_IMU
+#define CALIBRATE_ESC
 
 //// VARIABLES
 bool killed=false;
@@ -8,15 +10,9 @@ bool crashed=false;
 bool armed=false;
 
 ///// IMU
-float RateRoll, RatePitch, RateYaw;
-float RateCalibrationRoll, RateCalibrationPitch, RateCalibrationYaw;
-int RateCalibrationNumber;
-float AccX, AccY, AccZ;
-float AngleRoll, AnglePitch;
-uint32_t LoopTimer;
-float KalmanAngleRoll=0, KalmanUncertaintyAngleRoll=2*2;
-float KalmanAnglePitch=0, KalmanUncertaintyAnglePitch=2*2;
-float Kalman1DOutput[]={0,0};
+float AngleRoll=0, AnglePitch=0, AngleYaw=0;
+float AngleRollOffset=0, AnglePitchOffset=0, AngleYawOffset=0;
+uint32_t LoopTimer = micros();
 
 ///// RECEIVER
 #define CH_ROL 0  // roll        -> channel 1
@@ -71,4 +67,8 @@ float yaw_integral = 0;
 float yaw_derivative = 0;
 float yaw_previous_error = 0;
 
-int rollAdjusted=0, pitchAdjusted=0, yawAdjusted=0;
+float rollAdjusted=0.0, pitchAdjusted=0.0, yawAdjusted=0.0;
+
+///// OLED
+uint32_t oledTimer = micros();
+uint32_t lastDisplay = micros();
