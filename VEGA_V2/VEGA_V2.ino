@@ -1,7 +1,9 @@
+
 #include <Wire.h>
 TwoWire Wire(0);
 #include "GLOBALS.h"
 #include "OLED.h"
+#include "WIFI.h"
 #include "IMU.h"
 #include "RECEIVER.h"
 #include "PID.h"
@@ -11,6 +13,7 @@ long lastRecieved;
 void setup() {
   Serial.println("\n\nBOOTED");
   SetupOLED();
+  SetupWIFI();
   SetupIMU();
   SetupRECEIVER();
   SetupMOTOR();
@@ -20,23 +23,24 @@ void setup() {
 }
 
 void loop() {
-  for(int i=0;i<10;i++){
+  for(int i=0;i<3                                                                                                                  ;i++){
     mpu.update();
-    delay(3); 
+    delay(3);
   }
   LoopIMU();
 
-  if(micros() - lastRecieved > (80*1000)){
+  Serial.print(">");
+  Serial.print(AngleRoll);
+  Serial.print(" R ");
+  Serial.print(AnglePitch);
+  Serial.print(" P ");
+  Serial.print(AngleYaw);
+  Serial.println(" Y ");
+
+  if(micros() - lastRecieved > (100*1000)){
     LoopRECEIVER();
     lastRecieved = micros();
   }
-  
-  Serial.print("Roll ");
-  Serial.print(AngleRoll);
-  Serial.print(" Pitch ");
-  Serial.print(AnglePitch);
-  Serial.print(" Yaw ");
-  Serial.println(AngleYaw);
 
   Serial.print("THROTTLE ");Serial.print(throttleRaw);
   Serial.print(" ROLL ");Serial.print(rollRaw);
@@ -59,8 +63,10 @@ void loop() {
   Serial.print("ESC2 ");Serial.print(ESCout_2);
   Serial.print(" ESC4 ");Serial.println(ESCout_4);
 
+  LoopWIFI();
+
   // Refresh OLED 4 times a second
-  if(micros() - oledTimer > 200 * 1000){
+  if(micros() - oledTimer > 250 * 1000){
     display.display();
     oledTimer = micros();
   }

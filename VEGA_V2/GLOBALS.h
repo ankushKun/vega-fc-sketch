@@ -3,6 +3,7 @@
 
 #define CALIBRATE_IMU
 #define CALIBRATE_ESC
+#define ENABLE_WIFI
 
 //// VARIABLES
 bool killed=false;
@@ -37,15 +38,15 @@ int input_PITCH=0, input_ROLL=0, input_YAW=0, input_THROTTLE=0;
 int ESCout_1=0, ESCout_2=0, ESCout_3=0, ESCout_4=0;
 
 ///// PID VARS
-float roll_Kp = 0.7;
+float roll_Kp = 1;
 float roll_Ki = 0.000;
 float roll_Kd = 0.000;
 
-float pitch_Kp = 0.7;
+float pitch_Kp = 1;
 float pitch_Ki = 0.000;
 float pitch_Kd = 0.000;
 
-float yaw_Kp = 0.7;
+float yaw_Kp = 1;
 float yaw_Ki = 0.000;
 float yaw_Kd = 0.000;
 

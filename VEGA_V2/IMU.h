@@ -65,7 +65,7 @@ void SetupIMU(){
   #endif
   Serial.println("PLACE DRONE ON A FLAT SURFACE");
   oledPrint("PLACE DRONE ON FLAT SURFACE",1,true,true,true);
-  delay(7000);
+  delay(5000);
   float r=0.0,p=0.0,y=0.0;
   for(int i=0;i<1001;i++){
     mpu.update();
@@ -81,8 +81,8 @@ void SetupIMU(){
     Serial.print(" Yaw ");
     Serial.println(mpu.getYaw());
     if(i%100==0){
-      oledPrint((String)((i/100)+1),1,true,false,false);
-      oledPrint(" ",1,false,false,true);
+      oledPrint((String)((i/100)+1),2,true,false,false);
+      oledPrint(" ",2,false,false,true);
     }
     delay(10);
   }
